@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ArcMenu">
+        <!--<attr name="position" />
+        <attr name="radius" />-->
+        <attr name="position">
+            <enum name="left_top" value="0" />
+            <enum name="left_bottom" value="1" />
+            <enum name="right_top" value="2" />
+            <enum name="right_bottom" value="3" />
+        </attr>
+        <attr name="radius" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="CheckView">
+        <!-- 随机点数 -->
+        <attr name="point_num" format="integer" />
+        <!-- 随机线数 -->
+        <attr name="line_num" format="integer" />
+        <!-- 验证码长度 -->
+        <attr name="text_length" format="integer" />
+        <!-- 验证码字体大小-->
+        <attr name="text_size" format="dimension" />
+        <!-- 验证码字体颜色 -->
+        <attr name="text_color" format="color" />
+        <!-- 背景颜色-->
+        <attr name="bg_color" format="color" />
+    </declare-styleable>
+
+</resources>

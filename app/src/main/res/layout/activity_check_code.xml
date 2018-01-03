@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:kongqw="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.wusir.wuweather.CheckCodeActivity">
+    <com.wusir.customView.CheckView
+        android:id="@+id/checkView"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        kongqw:bg_color="#FFFFFF00"
+        kongqw:line_num="10"
+        kongqw:point_num="100"
+        kongqw:text_color="#FF00FFFF"
+        kongqw:text_length="6"
+        kongqw:text_size="30dp" />
+    <EditText
+        android:id="@+id/checkTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请出入验证码" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="验证" />
+    <Button
+        android:id="@+id/ref"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="换一张" />
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入手机号码">
+        <!--横屏模式下适用-->
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入密码">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+    <Button
+        android:id="@+id/showDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="显示底部菜单" />
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+            <Button
+                android:id="@+id/btn_bottomsheet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:text="显示底部弹窗"
+                android:textColor="@color/colorGreen"
+                android:textSize="17sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#ffaaaa"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="50dp"
+            app:elevation="5dp"
+            app:layout_behavior="@string/bottom_sheet_behavior">
+            <TextView
+                android:id="@+id/tv_popup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="底部弹窗菜单"
+                android:textColor="#000000"
+                android:textSize="17sp"/>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

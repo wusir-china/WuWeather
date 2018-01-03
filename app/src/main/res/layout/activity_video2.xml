@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.wusir.player.Video2Activity">
+    <SurfaceView
+        android:id="@+id/sv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+    <LinearLayout
+        android:background="@drawable/play_shape"
+        android:layout_below="@+id/sv"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:elevation="3dp"
+        android:translationZ="6dp"
+        android:backgroundTint="@color/colorGreen"
+        android:orientation="horizontal" >
+        <ImageView
+            android:id="@+id/btnplay"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="30dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/play" />
+
+        <ImageView
+            android:id="@+id/btnpause"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/pause" />
+
+        <ImageView
+            android:id="@+id/btnstop"
+            android:scaleType="centerCrop"
+            android:layout_marginLeft="30dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/stop" />
+    </LinearLayout>
+    <ListView
+        android:layout_marginTop="250dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ececec"
+        android:id="@+id/list_moment"
+        android:dividerHeight="10dp"
+        android:divider="#ececec"
+        android:cacheColorHint="@android:color/transparent">
+    </ListView>
+</RelativeLayout>
