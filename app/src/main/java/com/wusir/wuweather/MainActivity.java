@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view, int pos){
                 switch (pos){
                     case 5:
+                        //运行时权限
                         requestPermissions();
                         break;
                     case 4:
