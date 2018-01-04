@@ -65,15 +65,15 @@ public class CheckCodeActivity extends AppCompatActivity implements View.OnClick
         // 生成验证码
         mCheckView.invaliChenkCode();
          // Android 2.2及以下用HttpClient，Android 2.3及以上用HttpURLConnection
-        try {
-            URL url = new URL("http://localhost:8080/xxx.do");
-            HttpURLConnection conn= (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("post");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            URL url = new URL("http://localhost:8080/xxx.do");
+//            HttpURLConnection conn= (HttpURLConnection) url.openConnection();
+//            conn.setRequestMethod("post");
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         //一、
 //        CookieSyncManager.createInstance(this);
