@@ -14,7 +14,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false//false表示关闭proguard，true表示开启proguard
+            minifyEnabled false//false表示关闭proguard，true表示开启proguard。
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
