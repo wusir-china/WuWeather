@@ -3,23 +3,29 @@ package com.wusir.wuweather;
 import android.os.Handler;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cookie.store.CookieStore;
 import com.wusir.StatusBarCompat;
 import com.wusir.customView.CheckView;
+import com.wusir.util.SizeTransferUtil;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -39,6 +45,8 @@ public class CheckCodeActivity extends AppCompatActivity implements View.OnClick
     private Button mRef,btn_bottomsheet,showDialog;
     private BottomSheetBehavior behavior;
     private BottomSheetDialog dialog;
+    private FlexboxLayout flexboxLayout;
+    private String tags[]={"婚姻育儿", "散文", "设计", "上班这点事儿", "影视天堂", "大学生活", "美人说", "运动和健身", "工具癖", "生活家", "程序员", "想法"};
     // 验证码：
     private String mCheckCode = null;
     private Handler mHandler=new Handler();
@@ -104,9 +112,36 @@ public class CheckCodeActivity extends AppCompatActivity implements View.OnClick
         mHandler.postDelayed(mState,50);
         showDialog= (Button) findViewById(R.id.showDialog);
         showDialog.setOnClickListener(this);
+        //google官方流式布局的使用
+        flexboxLayout= (FlexboxLayout) findViewById(R.id.flexbox);
+        for(int i=0;i<tags.length;i++){
+            flexboxLayout.addView(createNewFlexItemTextView(tags[i]));
+        }
     }
+    //动态创建textview
+    private TextView createNewFlexItemTextView(final String str) {
+        TextView textView = new TextView(this);
+        textView.setGravity(Gravity.CENTER);
+        textView.setText(str);
+        textView.setTextSize(12);
+        textView.setTextColor(getResources().getColor(R.color.colorAccent));
+        textView.setBackgroundResource(R.drawable.small_green_button);
+
+        int padding = SizeTransferUtil.dpToPixel(this, 4);
+        int paddingLeftAndRight = SizeTransferUtil.dpToPixel(this, 8);
+        ViewCompat.setPaddingRelative(textView, paddingLeftAndRight, padding, paddingLeftAndRight, padding);
+        FlexboxLayout.LayoutParams layoutParams = new FlexboxLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        int margin = SizeTransferUtil.dpToPixel(this, 6);
+        int marginTop = SizeTransferUtil.dpToPixel(this, 16);
+        layoutParams.setMargins(margin, marginTop, margin, 0);
+        textView.setLayoutParams(layoutParams);
+        return textView;
+    }
+
     private void showDialog(){
-        final BottomSheetDialog dialog=new BottomSheetDialog(this);
+        dialog=new BottomSheetDialog(this);
         View dialogView= LayoutInflater.from(this).inflate(R.layout.bottom_sheet_dialog,null);
         ListView listView= (ListView) dialogView.findViewById(R.id.listview);
         String[] array=new String[]{"item-1","item-2","item-3","item-4","item-5","item-6","item-7"};

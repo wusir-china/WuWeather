@@ -51,6 +51,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </android.support.design.widget.TextInputLayout>
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:alignItems="flex_start"
+        app:alignContent="flex_start">
+    </com.google.android.flexbox.FlexboxLayout>
     <Button
         android:id="@+id/showDialog"
         android:layout_width="match_parent"
