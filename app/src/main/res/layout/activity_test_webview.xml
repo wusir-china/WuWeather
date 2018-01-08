@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--EditText和TextView用于java调用js方法-->
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+    <TextView
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="提交内容到webview的p标签"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:background="@drawable/small_green_button"/>
+    <!--WebView用于js调用java方法-->
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"></WebView>
+</LinearLayout>

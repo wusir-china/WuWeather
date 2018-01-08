@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #p1{
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            color: #ffffff;
+            background-color: #0066ff;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+    //1.js调用java方法
+    function sumToJava(){
+        window.wusir.onSumResult(1 + 2)
+    }
+    function callphone(){
+        window.wusir.callPhone("15757184616")
+    }
+    //2.java调用js方法
+    function showInfoFromJava(msg) {
+        document.getElementById("p1").innerHTML=msg;
+    }
+</script>
+<h3>1.js调用java方法实例</h3>
+<button type="button" onclick="sumToJava()">1+2=</button>
+<button type="button" onclick="callphone()">打电话</button>
+<h3>2.java调用js方法实例</h3>
+<p id="p1">Hello World!</p>
+</body>
+</html>
