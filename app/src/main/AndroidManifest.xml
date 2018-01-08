@@ -27,6 +27,7 @@
         <activity android:name=".CheckCodeActivity" />
         <activity android:name=".QRcodeActivity" />
         <activity android:name=".PhotoViewActivity" />
+        <activity android:name=".TestWebViewActivity" />
         <activity android:name=".RichEditActivity"></activity>
     </application>
 

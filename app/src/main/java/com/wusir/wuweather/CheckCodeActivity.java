@@ -39,6 +39,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 public class CheckCodeActivity extends AppCompatActivity implements View.OnClickListener{
+
     private CheckView mCheckView;
     private EditText mEditPass;
     private Button mSubmit;

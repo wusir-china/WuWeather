@@ -23,6 +23,7 @@ import android.text.SpannableStringBuilder;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout cl;
     private ArcMenu mArcMenu;
     private FloatingActionButton fab;
+    private TextView testJs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         sequence.start();
     }
     private void initView(){
+        testJs= (TextView) findViewById(R.id.testJs);
         fab= (FloatingActionButton) findViewById(R.id.fab);
         cl= (CoordinatorLayout) findViewById(R.id.cl);
         mArcMenu = (ArcMenu) findViewById(R.id.id_menu);
@@ -166,6 +169,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent in=new Intent(MainActivity.this, GameRankActivity.class);
+                startActivity(in);
+            }
+        });
+        testJs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in=new Intent(MainActivity.this, TestWebViewActivity.class);
                 startActivity(in);
             }
         });
