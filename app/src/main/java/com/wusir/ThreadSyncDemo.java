@@ -106,6 +106,7 @@ public class ThreadSyncDemo {
     //测试
     public static void main(String args[]){
         final ThreadSyncDemo demo=new ThreadSyncDemo();
+        //demo.finalize();//Object的方法，作用是在System.gc()之前做必要的清理工作。
         //入账线程
         Thread tAdd=new Thread(new Runnable() {
             @Override
