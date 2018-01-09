@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 /**
  * Created by zhy on 15/9/21.
- * 修改状态栏颜色
+ * 修改状态栏颜色，Android沉浸式状态栏变色
  */
 public class StatusBarCompat {
     private static final int INVALID_VAL = -1;
