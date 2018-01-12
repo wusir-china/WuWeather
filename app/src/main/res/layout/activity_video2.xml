@@ -50,6 +50,7 @@
         android:id="@+id/list_moment"
         android:dividerHeight="10dp"
         android:divider="#ececec"
+        style="@style/AppTheme"
         android:cacheColorHint="@android:color/transparent">
     </ListView>
 </RelativeLayout>

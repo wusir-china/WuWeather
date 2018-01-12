@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout cl;
     private ArcMenu mArcMenu;
     private FloatingActionButton fab;
-    private TextView testJs;
+    private TextView testJs,testService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void initView(){
         testJs= (TextView) findViewById(R.id.testJs);
+        testService= (TextView) findViewById(R.id.testService);
         fab= (FloatingActionButton) findViewById(R.id.fab);
         cl= (CoordinatorLayout) findViewById(R.id.cl);
         mArcMenu = (ArcMenu) findViewById(R.id.id_menu);
@@ -176,6 +177,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent in=new Intent(MainActivity.this, TestWebViewActivity.class);
+                startActivity(in);
+            }
+        });
+        testService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in=new Intent(MainActivity.this, TestServiceActivity.class);
                 startActivity(in);
             }
         });
