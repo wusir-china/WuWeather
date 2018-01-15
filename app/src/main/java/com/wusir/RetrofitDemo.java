@@ -1,11 +1,16 @@
 package com.wusir;
 
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
 import com.wusir.wuweather.WeatherApi;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
@@ -89,11 +94,38 @@ public class RetrofitDemo {
                 .getWeather4Json("city")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<ResponseBody>() {
+                .subscribe(new Observer<ResponseBody>() {
                     @Override
-                    public void accept(ResponseBody responseBody) throws Exception {
-                        System.out.print(responseBody.string());
+                    public void onSubscribe(Disposable d) {
+                        d.isDisposed();
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody responseBody) {
+                        //更新ui线程
+                        TextView textView=null;
+                        try {
+                            textView.setText(responseBody.string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        //加载完成
                     }
                 });
+//                .subscribe(new Consumer<ResponseBody>() {
+//                    @Override
+//                    public void accept(ResponseBody responseBody) throws Exception {
+//                        System.out.print(responseBody.string());
+//                    }
+//                });
     }
 }
