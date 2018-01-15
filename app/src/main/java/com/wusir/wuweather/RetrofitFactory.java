@@ -63,6 +63,7 @@ public class RetrofitFactory {
                 OkHttpClient.Builder builder = new OkHttpClient.Builder()
                         .cookieJar(cookieJar)
                         .cache(cache)
+                        .addInterceptor(cacheControlInterceptor)
                         .connectTimeout(10, TimeUnit.SECONDS)
                         .readTimeout(15, TimeUnit.SECONDS)
                         .writeTimeout(15, TimeUnit.SECONDS)
