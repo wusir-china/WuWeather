@@ -4,6 +4,7 @@ import com.wusir.bean.HeWeathers;
 import com.wusir.wuweather.RetrofitFactory;
 import com.wusir.wuweather.WeatherApi;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zy on 2017/11/23.
@@ -42,6 +47,26 @@ public class WeatherPresenter implements IWeather.Presenter{
 
     @Override
     public void doLoadData(String category) {
+        //没加rxjava
+        Call<ResponseBody> call=RetrofitFactory.getRetrofit()
+                .create(WeatherApi.class)
+                .getWeather3Json(category);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    System.out.print(response.body().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+        //加了rxjava
         Observable<HeWeathers> ob = RetrofitFactory.getRetrofit()
                 .create(WeatherApi.class)
                 .getWeather2Json(category);
