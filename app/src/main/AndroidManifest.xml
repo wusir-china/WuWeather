@@ -29,7 +29,13 @@
         <activity android:name=".PhotoViewActivity" />
         <activity android:name=".TestWebViewActivity" />
         <activity android:name=".TestServiceActivity" />
+        <activity android:name=".TestRetrofitActivity" />
         <activity android:name=".RichEditActivity"></activity>
+
+        <service android:name="com.wusir.service.ForegroundService"></service>
+        <service android:name="com.wusir.service.BackgroundService"></service>
+        <service android:name="com.wusir.service.RemoteService"></service>
+        <service android:name="com.wusir.service.KeepProcessAliveService"></service>
     </application>
 
 </manifest>

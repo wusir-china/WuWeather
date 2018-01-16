@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,9 +19,12 @@ import android.widget.TextView;
 import com.wusir.StatusBarCompat;
 import com.wusir.service.BackgroundService;
 import com.wusir.service.ForegroundService;
+import com.wusir.service.IBackgroundService;
+import com.wusir.service.IRemoteService;
+import com.wusir.service.RemoteService;
 
 public class TestServiceActivity extends AppCompatActivity implements View.OnClickListener{
-    private TextView start,stop,bind,unbind;
+    private TextView start,stop,bind,unbind,tv_count,bindRemote,unbindRemote;
     private int i = 0;
     private NotificationManager manager = null;
     private NotificationCompat.Builder builder;
@@ -41,29 +45,64 @@ public class TestServiceActivity extends AppCompatActivity implements View.OnCli
         super.onDestroy();
         handler.removeCallbacks(updateThread);
         manager.cancel(NotificationID);
-//        Intent intent2=new Intent(this,ForegroundService.class);
-//        stopService(intent2);
+        this.stopService(new Intent(this, ForegroundService.class));
     }
 
     private void initViews() {
+        tv_count= (TextView) findViewById(R.id.tv_count);
         start= (TextView) findViewById(R.id.start);
         stop= (TextView) findViewById(R.id.stop);
         bind= (TextView) findViewById(R.id.bind);
         unbind= (TextView) findViewById(R.id.unbind);
+        bindRemote= (TextView) findViewById(R.id.bindRemote);
+        unbindRemote= (TextView) findViewById(R.id.unbindRemote);
         start.setOnClickListener(this);
         stop.setOnClickListener(this);
         bind.setOnClickListener(this);
         unbind.setOnClickListener(this);
+        bindRemote.setOnClickListener(this);
+        unbindRemote.setOnClickListener(this);
     }
-    private ServiceConnection conn=new ServiceConnection() {
+    //local service
+    private IBackgroundService backgroundService;
+    private ServiceConnection localConn=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-
+            backgroundService= (IBackgroundService) service;
+            TestServiceActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tv_count.setText("count is "+backgroundService.getCount());
+                }
+            });
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            backgroundService=null;
+        }
+    };
+    //remote service
+    private IRemoteService remoteService;
+    private ServiceConnection remoteConn=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            remoteService= (IRemoteService) service;
+            TestServiceActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        tv_count.setText("count is "+remoteService.getCount());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            remoteService=null;
         }
     };
     //使用了Notification的默认布局，也可以使用RemoteViews自定义它的布局
@@ -118,10 +157,17 @@ public class TestServiceActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.bind:
                 Intent intent3=new Intent(this,BackgroundService.class);
-                bindService(intent3,conn,BIND_AUTO_CREATE);
+                bindService(intent3,localConn,BIND_AUTO_CREATE);
                 break;
             case R.id.unbind:
-                unbindService(conn);
+                unbindService(localConn);
+                break;
+            case R.id.bindRemote:
+                Intent intent4=new Intent(this,RemoteService.class);
+                bindService(intent4,remoteConn,BIND_AUTO_CREATE);
+                break;
+            case R.id.unbindRemote:
+                unbindService(remoteConn);
                 break;
         }
     }

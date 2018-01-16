@@ -33,6 +33,16 @@
             android:layout_marginLeft="20dp"
             android:background="@drawable/small_green_button"
             android:text="service"/>
+        <TextView
+            android:id="@+id/testRetrofit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#fff"
+            android:padding="5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/small_green_button"
+            android:text="Retrofit"/>
     </LinearLayout>
     <android.support.design.widget.CoordinatorLayout
         android:layout_marginTop="40dp"

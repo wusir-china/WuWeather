@@ -19,25 +19,26 @@ import retrofit2.http.Query;
  */
 
 public interface WeatherApi {
+    String ss="https://free-api.heweather.com/v5/forecast?city=杭州&key=1bda33b149584e68b6932b234c12d8fe";
     //必须以‘/’结尾
     String key="1bda33b149584e68b6932b234c12d8fe";
-    String Host="https://free-api.heweather.com/v5/forecast?key="+key+"/";
+    String Host="https://free-api.heweather.com/v5/";
     //1.使用了Retrofit自己的返回类型Call和自定义泛型参数
-    @GET("city/{city}")
+    @GET("forecast")
     @FormUrlEncoded//默认形式请求数据类型mime
-    Call<HeWeathers> getWeatherJson(@Query("city") String city);//@Query("city") String city
+    Call<HeWeathers> getWeatherJson(@Query("city") String city,@Query("key") String key);
 
     //2.使用了Retrofit自己的返回类型Call和okhttp3.ResponseBody
-    @GET("https://free-api.heweather.com/v5/forecast?city=杭州&key=1bda33b149584e68b6932b234c12d8fe")
-    Call<ResponseBody> getWeather3Json(@Query("city") String city);
+    @GET("forecast")
+    Call<ResponseBody> getWeather3Json(@Query("city") String city,@Query("key") String key);
 
     //3.使用了RxJava返回类型Observable和自定义泛型参数
-    @GET("https://free-api.heweather.com/v5/forecast?city=杭州&key=1bda33b149584e68b6932b234c12d8fe")
-    Observable<HeWeathers> getWeather2Json(@Query("city") String city);
+    @GET("forecast")
+    Observable<HeWeathers> getWeather2Json(@Query("city") String city,@Query("key") String key);
 
     //4.使用了RxJava返回类型Observable和okhttp3.ResponseBody
-    @GET("https://free-api.heweather.com/v5/forecast?city=杭州&key=1bda33b149584e68b6932b234c12d8fe")
-    Observable<ResponseBody> getWeather4Json(@Query("city") String city);
+    @GET("forecast")
+    Observable<ResponseBody> getWeather4Json(@Query("city") String city,@Query("key") String key);
 
     /**
      * {@link Part} 后面支持三种类型，{@link RequestBody}、{@link okhttp3.MultipartBody.Part} 、任意类型

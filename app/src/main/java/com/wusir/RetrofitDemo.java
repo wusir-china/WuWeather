@@ -5,6 +5,9 @@ import android.widget.TextView;
 
 import com.wusir.wuweather.WeatherApi;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
  * Created by zy on 2018/1/15.
@@ -31,7 +35,7 @@ public class RetrofitDemo {
                 .baseUrl(WeatherApi.Host)
                 .build();
         WeatherApi wa=retrofit.create(WeatherApi.class);
-        Call<ResponseBody> call=wa.getWeather3Json("city");
+        Call<ResponseBody> call=wa.getWeather3Json("city",WeatherApi.key);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -60,7 +64,7 @@ public class RetrofitDemo {
                 .client(builder.build())
                 .build();
         retrofit.create(WeatherApi.class)
-                .getWeather3Json("city")
+                .getWeather3Json("city",WeatherApi.key)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -89,9 +93,10 @@ public class RetrofitDemo {
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl("host")
                 .client(builder.build())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         retrofit.create(WeatherApi.class)
-                .getWeather4Json("city")
+                .getWeather4Json("杭州",WeatherApi.key)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<ResponseBody>() {
