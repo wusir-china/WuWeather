@@ -43,6 +43,7 @@ public class ForegroundService extends Service {
     //3.
     @Override
     public boolean stopService(Intent name) {
+        //stopSelf();//停止Service
         Log.i("ForegroundService", "stopService");
         return super.stopService(name);
     }

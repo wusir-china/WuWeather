@@ -1,8 +1,11 @@
 package com.wusir.wuweather;
 
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,14 +25,17 @@ import com.wusir.service.BackgroundService;
 import com.wusir.service.ForegroundService;
 import com.wusir.service.IBackgroundService;
 import com.wusir.service.IRemoteService;
+import com.wusir.service.IntentServiceDemo;
 import com.wusir.service.RemoteService;
 
 public class TestServiceActivity extends AppCompatActivity implements View.OnClickListener{
-    private TextView start,stop,bind,unbind,tv_count,bindRemote,unbindRemote;
+    public static final String UPLOAD_RESULT ="com.zhy.blogcodes.intentservice.UPLOAD_RESULT";
+    private TextView start,stop,bind,unbind,tv_count,bindRemote,unbindRemote,startIntentService;
     private int i = 0;
     private NotificationManager manager = null;
     private NotificationCompat.Builder builder;
     private final int NotificationID = 0x10000;
+    private LinearLayout ll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,17 +45,47 @@ public class TestServiceActivity extends AppCompatActivity implements View.OnCli
         Log.i("TestServiceActivity", "onCreate");
         initNotification();
         handler.post(updateThread);//开启更新progressBar线程
+        registerReceiver();
     }
-
+    private void registerReceiver(){
+        IntentFilter filter=new IntentFilter();
+        filter.addAction(UPLOAD_RESULT);
+        registerReceiver(uploadImgReceiver,filter);
+    }
+    private int i2=0;
+    public void addTask(){
+        String path="/sdcard/imgs/"+(++i2)+".png";
+        IntentServiceDemo.startUploadImg(this,path);
+        TextView tv=new TextView(this);
+        ll.addView(tv);
+        tv.setText(path+"is uploading---");
+        tv.setTag(path);
+    }
+    private BroadcastReceiver uploadImgReceiver =new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent){
+            if(intent.getAction() == UPLOAD_RESULT){
+                String path = intent.getStringExtra(IntentServiceDemo.EXTRA_IMG_PATH);
+                handleResult(path);
+            }
+        }
+    };
+    private void handleResult(String path) {
+        TextView tv= (TextView) ll.findViewWithTag(path);
+        tv.setText(path+"upload success---");
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(updateThread);
         manager.cancel(NotificationID);
         this.stopService(new Intent(this, ForegroundService.class));
+        unregisterReceiver(uploadImgReceiver);
     }
 
     private void initViews() {
+        startIntentService= (TextView) findViewById(R.id.startIntentService);
+        ll= (LinearLayout) findViewById(R.id.ll);
         tv_count= (TextView) findViewById(R.id.tv_count);
         start= (TextView) findViewById(R.id.start);
         stop= (TextView) findViewById(R.id.stop);
@@ -168,6 +205,9 @@ public class TestServiceActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.unbindRemote:
                 unbindService(remoteConn);
+                break;
+            case R.id.startIntentService:
+                addTask();
                 break;
         }
     }
