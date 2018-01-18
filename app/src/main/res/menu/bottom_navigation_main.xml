@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_news"
+        android:enabled="true"
+        android:icon="@mipmap/icon_rank01"
+        android:title="艾欧尼亚"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_photo"
+        android:enabled="true"
+        android:icon="@mipmap/icon_rank02"
+        android:title="战争学院"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_video"
+        android:enabled="true"
+        android:icon="@mipmap/icon_rank03"
+        android:title="黑色玫瑰"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_media"
+        android:enabled="true"
+        android:icon="@mipmap/icon_rank04"
+        android:title="皮尔特"
+        app:showAsAction="ifRoom"/>
+</menu>
