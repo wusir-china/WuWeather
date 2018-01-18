@@ -16,7 +16,6 @@ public class BackgroundService extends Service {//implements IBackgroundService
     private boolean threadDisable;
     private int count;
     public class ServiceBinder extends Binder implements IBackgroundService{
-
         @Override
         public int getCount() {
             return count;
@@ -57,6 +56,7 @@ public class BackgroundService extends Service {//implements IBackgroundService
     //4.
     @Override
     public void onDestroy() {
+
         super.onDestroy();
         threadDisable=true;
         Log.i("ForegroundService", "onDestroy");

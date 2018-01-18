@@ -12,6 +12,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
@@ -34,6 +35,7 @@ import com.wusir.bean.FirstEvent;
 import com.wusir.bean.StandItem;
 import com.wusir.bean.Weather;
 import com.wusir.download.DownLoadManger;
+import com.wusir.util.OnLoadMoreListener;
 import com.wusir.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,15 +48,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RankItemFragment extends Fragment {
+public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private static final String ARG_PARAM = "param";
     private String mParam;
-    private SmartRefreshLayout refreshLayout;
+    //private SmartRefreshLayout refreshLayout;
+    private SwipeRefreshLayout refreshLayout;
     private RecyclerView mRecyclerView;
     private QuickAdapter adapter;
     private List<StandItem> rankList=new ArrayList<>();
     private int currentPage=1;
     private static final int NOTIFICATION_FLAG = 1;
+    protected boolean canLoadMore = false;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -101,31 +105,20 @@ public class RankItemFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        refreshLayout= (SmartRefreshLayout) view.findViewById(R.id.refreshLayout);
-
+        refreshLayout= (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mRecyclerView= (RecyclerView) view.findViewById(R.id.recyclerview);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        refreshLayout.autoRefresh();
-        //获取第一页数据
-        //getData();
-
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+        mRecyclerView.setHasFixedSize(true);
+        refreshLayout.setOnRefreshListener(this);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.addOnScrollListener(new OnLoadMoreListener() {
             @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                //refreshLayout.autoRefresh();
-                //获取第一页数据
-                getData();
-                refreshLayout.finishRefresh();
-            }
-        });
-        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
-            @Override
-            public void onLoadmore(RefreshLayout refreshlayout) {
-                //refreshlayout.autoLoadmore();
-                currentPage++;
-                getData();
-                refreshlayout.finishLoadmore();
+            public void onLoadMore() {
+                if (canLoadMore) {
+                    canLoadMore = false;
+                    //presenter.doLoadMoreData();
+                    ++currentPage;
+                    getData();
+                }
             }
         });
     }
@@ -138,11 +131,11 @@ public class RankItemFragment extends Fragment {
                     JSONObject jo = new JSONObject(response.body());
                     JSONArray data = jo.getJSONArray("data");
                     if(data.length()==0){
-                        refreshLayout.setEnableLoadmore(false);
+                        //refreshLayout.setEnableLoadmore(false);
                         EventBus.getDefault().post(new FirstEvent("没有更多的游戏了！"));
                         return;
                     }else{
-                        refreshLayout.setEnableLoadmore(true);
+                        //refreshLayout.setEnableLoadmore(true);
                     }
                     for(int i=0;i<data.length();i++){
                         JSONObject j = data.getJSONObject(i);
@@ -222,4 +215,16 @@ public class RankItemFragment extends Fragment {
             }
         }
     };
+
+    @Override
+    public void onRefresh() {
+        int firstVisibleItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        if (firstVisibleItemPosition == 0) {
+            //presenter.doRefresh();
+            getData();
+            return;
+        }
+        mRecyclerView.scrollToPosition(5);
+        mRecyclerView.smoothScrollToPosition(0);
+    }
 }

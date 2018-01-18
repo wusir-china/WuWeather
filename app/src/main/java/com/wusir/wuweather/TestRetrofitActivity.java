@@ -97,6 +97,7 @@ public class TestRetrofitActivity extends AppCompatActivity {
     private void getDataByRxjava(){
         RetrofitFactory.getRetrofit().create(WeatherApi.class)
                 .getWeather4Json("杭州",WeatherApi.key)
+
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
 //                .subscribe(new Consumer<ResponseBody>() {

@@ -29,7 +29,7 @@ import com.wusir.service.IntentServiceDemo;
 import com.wusir.service.RemoteService;
 
 public class TestServiceActivity extends AppCompatActivity implements View.OnClickListener{
-    public static final String UPLOAD_RESULT ="com.zhy.blogcodes.intentservice.UPLOAD_RESULT";
+    public static final String UPLOAD_RESULT ="com.wusir.service.intentservice.UPLOAD_RESULT";
     private TextView start,stop,bind,unbind,tv_count,bindRemote,unbindRemote,startIntentService;
     private int i = 0;
     private NotificationManager manager = null;
@@ -44,42 +44,38 @@ public class TestServiceActivity extends AppCompatActivity implements View.OnCli
         initViews();
         Log.i("TestServiceActivity", "onCreate");
         initNotification();
-        handler.post(updateThread);//开启更新progressBar线程
+        //handler.post(updateThread);//开启更新progressBar线程
         registerReceiver();
     }
     private void registerReceiver(){
-        IntentFilter filter=new IntentFilter();
-        filter.addAction(UPLOAD_RESULT);
+        IntentFilter filter=new IntentFilter(UPLOAD_RESULT);
         registerReceiver(uploadImgReceiver,filter);
     }
     private int i2=0;
     public void addTask(){
         String path="/sdcard/imgs/"+(++i2)+".png";
-        IntentServiceDemo.startUploadImg(this,path);
         TextView tv=new TextView(this);
-        ll.addView(tv);
         tv.setText(path+"is uploading---");
         tv.setTag(path);
+        ll.addView(tv);
+        IntentServiceDemo.startUploadImg(this,path);
     }
     private BroadcastReceiver uploadImgReceiver =new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent){
-            if(intent.getAction() == UPLOAD_RESULT){
+            if(intent.getAction()==UPLOAD_RESULT){//接收指定的广播
                 String path = intent.getStringExtra(IntentServiceDemo.EXTRA_IMG_PATH);
-                handleResult(path);
+                TextView tv= (TextView) ll.findViewWithTag(path);
+                tv.setText(path+"upload success---");
             }
         }
     };
-    private void handleResult(String path) {
-        TextView tv= (TextView) ll.findViewWithTag(path);
-        tv.setText(path+"upload success---");
-    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(updateThread);
-        manager.cancel(NotificationID);
-        this.stopService(new Intent(this, ForegroundService.class));
+//        handler.removeCallbacks(updateThread);
+//        manager.cancel(NotificationID);
+//        this.stopService(new Intent(this, ForegroundService.class));
         unregisterReceiver(uploadImgReceiver);
     }
 
@@ -99,6 +95,7 @@ public class TestServiceActivity extends AppCompatActivity implements View.OnCli
         unbind.setOnClickListener(this);
         bindRemote.setOnClickListener(this);
         unbindRemote.setOnClickListener(this);
+        startIntentService.setOnClickListener(this);
     }
     //local service
     private IBackgroundService backgroundService;
