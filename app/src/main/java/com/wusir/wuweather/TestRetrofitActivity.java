@@ -1,9 +1,11 @@
 package com.wusir.wuweather;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.trello.rxlifecycle2.RxLifecycle;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.wusir.StatusBarCompat;
 
 import java.io.IOException;
@@ -23,7 +25,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-public class TestRetrofitActivity extends AppCompatActivity {
+public class TestRetrofitActivity extends RxAppCompatActivity {
     private TextView result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +99,8 @@ public class TestRetrofitActivity extends AppCompatActivity {
     private void getDataByRxjava(){
         RetrofitFactory.getRetrofit().create(WeatherApi.class)
                 .getWeather4Json("杭州",WeatherApi.key)
-
+                .compose(this.<ResponseBody>bindToLifecycle())//防止RxJava的内存泄漏
+                .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
 //                .subscribe(new Consumer<ResponseBody>() {
