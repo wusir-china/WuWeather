@@ -4,25 +4,26 @@
     <item
         android:id="@+id/action_news"
         android:enabled="true"
-        android:icon="@mipmap/icon_rank01"
-        android:title="艾欧尼亚"
+        android:icon="@drawable/ic_newspaper_white_24dp"
+        android:title="景德镇"
         app:showAsAction="ifRoom"/>
+    <!--app:showAsAction="ifRoom"-->
     <item
         android:id="@+id/action_photo"
         android:enabled="true"
-        android:icon="@mipmap/icon_rank02"
-        android:title="战争学院"
+        android:icon="@drawable/ic_gallery_white_24dp"
+        android:title="杭州"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_video"
         android:enabled="true"
-        android:icon="@mipmap/icon_rank03"
-        android:title="黑色玫瑰"
+        android:icon="@drawable/ic_youtube_white_24dp"
+        android:title="南昌"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_media"
         android:enabled="true"
-        android:icon="@mipmap/icon_rank04"
-        android:title="皮尔特"
+        android:icon="@drawable/ic_library_books_white_24dp"
+        android:title="九江"
         app:showAsAction="ifRoom"/>
 </menu>

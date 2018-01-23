@@ -22,11 +22,11 @@ public class DownloadCenterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download_center);
         rv= (RecyclerView) findViewById(R.id.rv);
-        adapter=new DownloadSectionAdapter(this);
-        initData();
-        LinearLayoutManager manager=new LinearLayoutManager(this);
-        rv.setLayoutManager(manager);
-        rv.setAdapter(adapter);
+//        adapter=new DownloadSectionAdapter(this);
+//        initData();
+//        LinearLayoutManager manager=new LinearLayoutManager(this);
+//        rv.setLayoutManager(manager);
+//        rv.setAdapter(adapter);
     }
 
     private void initData() {

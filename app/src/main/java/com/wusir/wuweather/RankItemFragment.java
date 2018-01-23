@@ -19,6 +19,8 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lzy.okgo.OkGo;
@@ -57,8 +59,10 @@ public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnR
     private QuickAdapter adapter;
     private List<StandItem> rankList=new ArrayList<>();
     private int currentPage=1;
-    private static final int NOTIFICATION_FLAG = 1;
     protected boolean canLoadMore = false;
+    //private String citys;
+    private ArrayList<Weather> list = new ArrayList<>();
+    private MyAdapter myAdapter;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -109,16 +113,54 @@ public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnR
         mRecyclerView= (RecyclerView) view.findViewById(R.id.recyclerview);
         mRecyclerView.setHasFixedSize(true);
         refreshLayout.setOnRefreshListener(this);
-        mRecyclerView.setAdapter(adapter);
+        //getData();
         mRecyclerView.addOnScrollListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 if (canLoadMore) {
                     canLoadMore = false;
-                    //presenter.doLoadMoreData();
                     ++currentPage;
-                    getData();
+                    getWeatherData();
                 }
+            }
+        });
+        myAdapter=new MyAdapter();
+        mRecyclerView.setAdapter(myAdapter);
+        isViewInitiated = true;
+        prepareFetchData();
+    }
+    private void getWeatherData(){
+        OkGo.<String>get(Path.weApi(mParam)).tag(this).execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                try {
+                    list.clear();
+                    JSONObject jo = new JSONObject(response.body());
+                    JSONArray data = jo.getJSONArray("HeWeather5");
+                    for(int i=0;i<data.length();i++){
+                        JSONObject item= data.getJSONObject(i);
+                        JSONArray daily_forecast = item.getJSONArray("daily_forecast");
+                        for(int j=0;j<daily_forecast.length();j++){
+                            JSONObject subitem= daily_forecast.getJSONObject(j);
+                            JSONObject cond=subitem.getJSONObject("cond");
+                            String txt_d = cond.optString("txt_d");
+                            String date = subitem.optString("date");
+                            JSONObject tmp=subitem.getJSONObject("tmp");
+                            String min= tmp.optString("min");
+                            String max= tmp.optString("max");
+                            String stmp=min+"度/"+max+"度";
+                            list.add(new Weather(date,txt_d,stmp));
+                        }
+                    }
+                    myAdapter.notifyDataSetChanged();
+                    refreshLayout.setRefreshing(false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onError(Response<String> response) {
+                super.onError(response);
             }
         });
     }
@@ -128,13 +170,15 @@ public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onSuccess(Response<String> response) {
                 try {
                     //rankList.clear();
-                    JSONObject jo = new JSONObject(response.body());
+                    JSONObject jo = new JSONObject(response.body().toString());
                     JSONArray data = jo.getJSONArray("data");
                     if(data.length()==0){
+                        canLoadMore=false;
                         //refreshLayout.setEnableLoadmore(false);
                         EventBus.getDefault().post(new FirstEvent("没有更多的游戏了！"));
                         return;
                     }else{
+                        canLoadMore=true;
                         //refreshLayout.setEnableLoadmore(true);
                     }
                     for(int i=0;i<data.length();i++){
@@ -154,20 +198,8 @@ public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnR
                         rankList.add(si);
                     }
                     adapter=new QuickAdapter(R.layout.list_item_rank,rankList,getActivity());
-                    adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-                        @Override
-                        public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                            StandItem item=rankList.get(position);
-                            if(!DownLoadManger.getInstance().isExist(item.getDownurl())){
-                                DownLoadManger.getInstance().startDownLoad(item.getDownurl(),item);
-                                ToastUtil.showToast(getActivity(),"已加入到下载列表中");
-                                sendNotification(position);
-                            }else{
-                                ToastUtil.showToast(getActivity(),"已在下载列表中");
-                            }
-                        }
-                    });
                     mRecyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                     EventBus.getDefault().post(new FirstEvent("加载完成！"));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -179,52 +211,78 @@ public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
     }
-    private NotificationManager manager;
-    private Notification notify;
-    private void sendNotification(int position){
-        List<Progress> downing= DownloadManager.getInstance().getDownloading();
-        Progress progress=downing.get(position);
-        StandItem si= (StandItem) progress.extra1;
-        PendingIntent pendingIntent=PendingIntent.getActivity(getActivity(),0,new Intent(getActivity(), DownloadCenterActivity.class),0);
-        manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        notify=new Notification.Builder(getActivity())
-                .setSmallIcon(R.mipmap.icon)
-                .setContentTitle(si.getGameName())
-                .setProgress(si.getSize(),(int)progress.currentSize,false)
-                .setContentIntent(pendingIntent).build();
-        Message msg=new Message();
-        msg.what=1;
-        if(si.getSize()==(int)progress.currentSize){
-            msg.what=2;
-        }
-        handler.sendMessage(msg);
-        manager.notify(NOTIFICATION_FLAG, notify);
+    protected boolean isViewInitiated;
+    protected boolean isVisibleToUser;
+    protected boolean isDataInitiated;
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        this.isVisibleToUser = isVisibleToUser;
+        prepareFetchData();
     }
-    Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            //super.handleMessage(msg);
-            switch (msg.what){
-                case 1:
-                    manager.notify(NOTIFICATION_FLAG, notify);
-                    break;
-                case 2:
-                    notify.flags=Notification.FLAG_AUTO_CANCEL;
-                    manager.notify(NOTIFICATION_FLAG, notify);
-                    break;
-            }
-        }
-    };
 
+    public boolean prepareFetchData() {
+        if (isVisibleToUser && isViewInitiated && (!isDataInitiated || false)) {
+            getWeatherData();
+            isDataInitiated = true;
+            return true;
+        }
+        return false;
+    }
     @Override
     public void onRefresh() {
         int firstVisibleItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
         if (firstVisibleItemPosition == 0) {
             //presenter.doRefresh();
-            getData();
+            getWeatherData();
             return;
         }
-        mRecyclerView.scrollToPosition(5);
+        //平滑的定位到指定项
         mRecyclerView.smoothScrollToPosition(0);
+    }
+    class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+        @Override
+        public RankItemFragment.MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            RankItemFragment.MyAdapter.MyViewHolder viewHolder;
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.list_item_wether, parent, false);
+            viewHolder=new RankItemFragment.MyAdapter.MyViewHolder(view);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            RankItemFragment.MyAdapter.MyViewHolder mh = (RankItemFragment.MyAdapter.MyViewHolder) holder;
+            mh.tv_time.setText(list.get(position).getTime());
+            String status=list.get(position).getStatus();
+            mh.tv_status.setText(status);
+            if(status.equals("多云")){
+                //holder.iv.setBackgroundResource(R.mipmap.yin);//做背景时图片容易变形
+                mh.iv.setImageResource(R.mipmap.yin);//不变形
+            }else if(status.equals("晴")){
+                mh.iv.setImageResource(R.mipmap.qing);
+            }else {
+                mh.iv.setImageResource(R.mipmap.yu);
+            }
+            mh.tv_tmp.setText(list.get(position).getTmp());
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+        class MyViewHolder extends RecyclerView.ViewHolder{
+            public ImageView iv;
+            public TextView tv_time;
+            public  TextView tv_status;
+            public  TextView tv_tmp;
+            public MyViewHolder(final View itemView) {
+                super(itemView);
+                iv = (ImageView) itemView.findViewById(R.id.iv);
+                tv_time = (TextView) itemView.findViewById(R.id.time);
+                tv_status = (TextView) itemView.findViewById(R.id.status);
+                tv_tmp = (TextView) itemView.findViewById(R.id.tmp);
+            }
+        }
     }
 }
