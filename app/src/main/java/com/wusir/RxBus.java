@@ -35,10 +35,8 @@ public class RxBus {
             subjectList = new ArrayList<>();
             subjectMapper.put(tag, subjectList);
         }
-
         Subject<T> subject = PublishSubject.create();
         subjectList.add(subject);
-
         //System.out.println("注册到rxbus");
         return subject;
     }

@@ -1,7 +1,9 @@
 package com.wusir.modules.weather;
 
 import com.wusir.bean.HeWeathers;
+import com.wusir.bean.Weather;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +34,7 @@ public interface IWeather {
         /**
          * 5.设置适配器
          */
-        void onSetAdapter(List<?> list);
+        void onSetAdapter(List<Weather> list);
 
         /**
          * 6.加载完毕
@@ -41,12 +43,11 @@ public interface IWeather {
         /**
          * 7.请求数据
          */
-        void onLoadData();
-
+        //void onLoadData();
         /**
-         * 8.刷新
+         * 8.上拉刷新时视图
          */
-        void onRefresh();
+        //void onRefreshing();
     }
     interface Presenter{
         /**
@@ -61,17 +62,17 @@ public interface IWeather {
         /**
          * 请求数据
          */
-        void doLoadData(String category);
+        void doLoadData(String city);
 
         /**
          * 再起请求数据
          */
-        void doLoadMoreData();
+        void doLoadMoreData(String city);
 
         /**
          * 设置适配器
          */
-        void doSetAdapter(List<HeWeathers.HeWeather5Bean.DailyForecastBean> dataBeen);
+        void doSetAdapter(List<Weather> dataBeen);
 
         /**
          * 加载完毕

@@ -21,4 +21,20 @@
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="200dp"></WebView>
+    <TextView
+        android:id="@+id/fetch"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="通过jsoup从html中抓取数据"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/small_green_button"/>
+    <TextView
+        android:id="@+id/htmlData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:background="@drawable/small_green_button"/>
 </LinearLayout>

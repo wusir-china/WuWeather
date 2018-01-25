@@ -1,44 +1,30 @@
 package com.wusir.wuweather;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
-import com.lzy.okgo.db.DownloadManager;
-import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.wusir.RxBus;
 import com.wusir.adapter.QuickAdapter;
 import com.wusir.bean.FirstEvent;
 import com.wusir.bean.StandItem;
 import com.wusir.bean.Weather;
-import com.wusir.download.DownLoadManger;
-import com.wusir.util.OnLoadMoreListener;
-import com.wusir.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,22 +33,36 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
+
+public class RankItemFragment extends Fragment{
     private static final String ARG_PARAM = "param";
     private String mParam;
-    //private SmartRefreshLayout refreshLayout;
-    private SwipeRefreshLayout refreshLayout;
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.smartLayout)
+    SmartRefreshLayout smartLayout;
+    @BindView(R.id.recyclerview)
+    RecyclerView mRecyclerView;
     private QuickAdapter adapter;
     private List<StandItem> rankList=new ArrayList<>();
     private int currentPage=1;
     protected boolean canLoadMore = false;
-    //private String citys;
     private ArrayList<Weather> list = new ArrayList<>();
     private MyAdapter myAdapter;
+    protected boolean isViewInitiated;
+    protected boolean isVisibleToUser;
+    protected boolean isDataInitiated;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -101,29 +101,34 @@ public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_rank_item, container, false);
+        ButterKnife.bind(this,view);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        refreshLayout= (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
-        mRecyclerView= (RecyclerView) view.findViewById(R.id.recyclerview);
-        mRecyclerView.setHasFixedSize(true);
-        refreshLayout.setOnRefreshListener(this);
-        //getData();
-        mRecyclerView.addOnScrollListener(new OnLoadMoreListener() {
+        smartLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onLoadMore() {
-                if (canLoadMore) {
-                    canLoadMore = false;
-                    ++currentPage;
-                    getWeatherData();
+            public void onRefresh(RefreshLayout refreshlayout) {
+                int firstVisibleItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition == 0) {
+                    //presenter.doRefresh();
+                    getDataByRxjava();
+                    return;
                 }
+                //平滑的定位到指定项
+                mRecyclerView.smoothScrollToPosition(0);
             }
         });
+        smartLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+
+            }
+        });
+        mRecyclerView.setHasFixedSize(true);
         myAdapter=new MyAdapter();
         mRecyclerView.setAdapter(myAdapter);
         isViewInitiated = true;
@@ -153,7 +158,7 @@ public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnR
                         }
                     }
                     myAdapter.notifyDataSetChanged();
-                    refreshLayout.setRefreshing(false);
+                    smartLayout.finishRefresh();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -211,34 +216,73 @@ public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
     }
-    protected boolean isViewInitiated;
-    protected boolean isVisibleToUser;
-    protected boolean isDataInitiated;
+    private void getDataByRxjava(){
+        RetrofitFactory.getRetrofit().create(WeatherApi.class)
+                .getWeather4Json(mParam,WeatherApi.key)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        d.isDisposed();
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody responseBody) {
+                        //更新ui线程
+                        try {
+                            list.clear();
+                            JSONObject jo = new JSONObject(responseBody.string());
+                            JSONArray data = jo.getJSONArray("HeWeather5");
+                            for(int i=0;i<data.length();i++){
+                                JSONObject item= data.getJSONObject(i);
+                                JSONArray daily_forecast = item.getJSONArray("daily_forecast");
+                                for(int j=0;j<daily_forecast.length();j++){
+                                    JSONObject subitem= daily_forecast.getJSONObject(j);
+                                    JSONObject cond=subitem.getJSONObject("cond");
+                                    String txt_d = cond.optString("txt_d");
+                                    String date = subitem.optString("date");
+                                    JSONObject tmp=subitem.getJSONObject("tmp");
+                                    String min= tmp.optString("min");
+                                    String max= tmp.optString("max");
+                                    String stmp=min+"度/"+max+"度";
+                                    list.add(new Weather(date,txt_d,stmp));
+                                }
+                            }
+                            myAdapter.notifyDataSetChanged();
+                            smartLayout.finishRefresh();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        //加载完成
+                    }
+                });
+    }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         this.isVisibleToUser = isVisibleToUser;
         prepareFetchData();
     }
-
     public boolean prepareFetchData() {
         if (isVisibleToUser && isViewInitiated && (!isDataInitiated || false)) {
-            getWeatherData();
+            //getWeatherData();
+            getDataByRxjava();
             isDataInitiated = true;
             return true;
         }
         return false;
-    }
-    @Override
-    public void onRefresh() {
-        int firstVisibleItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-        if (firstVisibleItemPosition == 0) {
-            //presenter.doRefresh();
-            getWeatherData();
-            return;
-        }
-        //平滑的定位到指定项
-        mRecyclerView.smoothScrollToPosition(0);
     }
     class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         @Override
@@ -246,7 +290,7 @@ public class RankItemFragment extends Fragment implements SwipeRefreshLayout.OnR
             RankItemFragment.MyAdapter.MyViewHolder viewHolder;
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_wether, parent, false);
-            viewHolder=new RankItemFragment.MyAdapter.MyViewHolder(view);
+            viewHolder=new MyAdapter.MyViewHolder(view);//RankItemFragment.
             return viewHolder;
         }
 
