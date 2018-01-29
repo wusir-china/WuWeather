@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_news"
+        android:enabled="true"
+        android:icon="@drawable/ic_newspaper_white_24dp"
+        android:title="前30"
+        app:showAsAction="ifRoom"/>
+    <!--app:showAsAction="ifRoom"-->
+    <item
+        android:id="@+id/action_photo"
+        android:enabled="true"
+        android:icon="@drawable/ic_gallery_white_24dp"
+        android:title="前60"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_video"
+        android:enabled="true"
+        android:icon="@drawable/ic_youtube_white_24dp"
+        android:title="前90"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_media"
+        android:enabled="true"
+        android:icon="@drawable/ic_library_books_white_24dp"
+        android:title="前120"
+        app:showAsAction="ifRoom"/>
+</menu>
