@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout cl;
     private ArcMenu mArcMenu;
     private FloatingActionButton fab;
-    private TextView testJs,testService,testRetrofit;
+    private TextView testJs,testService,testRetrofit,testDouBan;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
         aTitleList.add("南昌");
         aTitleList.add("九江");
         aTitleList.add("景德镇");
-        f1=ItemFragment.newInstance(1);
-        f2=ItemFragment.newInstance(2);
-        f3=ItemFragment.newInstance(3);
-        f4=ItemFragment.newInstance(4);
+        f1=ItemFragment.newInstance("杭州");
+        f2=ItemFragment.newInstance("南昌");
+        f3=ItemFragment.newInstance("九江");
+        f4=ItemFragment.newInstance("景德镇");
         ArrayList<Fragment> list=new ArrayList<>();
         list.add(f1);
         list.add(f2);
@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         sequence.start();
     }
     private void initView(){
+        testDouBan= (TextView) findViewById(R.id.testDouBan);
         testJs= (TextView) findViewById(R.id.testJs);
         testService= (TextView) findViewById(R.id.testService);
         testRetrofit= (TextView) findViewById(R.id.testRetrofit);
@@ -193,6 +194,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent in=new Intent(MainActivity.this, TestRetrofitActivity.class);
                 startActivity(in);
+            }
+        });
+        testDouBan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,DownloadCenterActivity.class));
             }
         });
         mArcMenu.setOnMenuItemClickListener(new ArcMenu.OnMenuItemClickListener(){

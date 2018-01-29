@@ -4,6 +4,7 @@ import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.wusir.modules.moive.DouBanMovieService;
 import com.wusir.util.NetWorkUtil;
 
 
@@ -84,7 +85,7 @@ public class RetrofitFactory {
 //                                return cookies!=null?cookies:new ArrayList<Cookie>();
 //                            }
 //                        })
-                        .cache(cache)
+                        //.cache(cache)
                         .addInterceptor(cacheControlInterceptor)
                         .connectTimeout(10, TimeUnit.SECONDS)
                         .readTimeout(15, TimeUnit.SECONDS)

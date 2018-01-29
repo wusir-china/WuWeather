@@ -215,17 +215,17 @@ public class WeatherItemFragment extends Fragment implements IWeather.View{
 
     class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         @Override
-        public WeatherItemFragment.MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            WeatherItemFragment.MyAdapter.MyViewHolder viewHolder;
+        public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            MyAdapter.MyViewHolder viewHolder;
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_item_wether, parent, false);
-            viewHolder=new WeatherItemFragment.MyAdapter.MyViewHolder(view);
+            viewHolder=new MyAdapter.MyViewHolder(view);
             return viewHolder;
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            WeatherItemFragment.MyAdapter.MyViewHolder mh = (WeatherItemFragment.MyAdapter.MyViewHolder) holder;
+            MyAdapter.MyViewHolder mh = (MyAdapter.MyViewHolder) holder;
             mh.tv_time.setText(list.get(position).getTime());
             String status=list.get(position).getStatus();
             mh.tv_status.setText(status);
