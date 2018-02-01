@@ -80,11 +80,12 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
         smartLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                int firstVisibleItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                if (firstVisibleItemPosition == 0) {
-                    presenter.doLoadData(start,count);
-                    return;
-                }
+                presenter.doLoadData(start,count);
+//                int firstVisibleItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+//                if (firstVisibleItemPosition == 0) {
+//                    presenter.doLoadData(start,count);
+//                    return;
+//                }
                 //平滑的定位到指定项
                 mRecyclerView.smoothScrollToPosition(0);
             }
@@ -97,8 +98,8 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
         });
         mRecyclerView.setHasFixedSize(true);
         isViewInitiated = true;
-//        myAdapter=new MovieAdapter(list,getContext());
-//        mRecyclerView.setAdapter(myAdapter);
+        //myAdapter=new MovieAdapter(list,getContext());
+        //mRecyclerView.setAdapter(myAdapter);
         prepareFetchData();
     }
     @Override
@@ -135,13 +136,7 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
     @Override
     public void onShowNetError() {
         ToastUtil.showToast(getActivity(),"网络不给力");
-        myAdapter.notifyDataSetChanged();
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                myAdapter.notifyDataSetChanged();
-//            }
-//        });
+        //myAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -157,25 +152,12 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
         myAdapter=new MovieAdapter(list,getContext());
         mRecyclerView.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                myAdapter.notifyDataSetChanged();
-//            }
-//        });
     }
 
     @Override
     public void onShowNoMore() {
         ToastUtil.showToast(getActivity(),"没有更多数据");
-        myAdapter.notifyDataSetChanged();
+        //myAdapter.notifyDataSetChanged();
         //smartLayout.finishRefresh();
-        //refreshLayout.setRefreshing(false);
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                myAdapter.notifyDataSetChanged();
-//            }
-//        });
     }
 }
