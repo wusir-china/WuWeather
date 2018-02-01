@@ -17,10 +17,11 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.wusir.player.VideoActivity"/>
+        <activity android:name="com.wusir.player.VideoActivity" />
         <activity android:name="com.wusir.player.Video2Activity" />
         <activity android:name=".GameRankActivity" />
         <activity android:name=".DownloadCenterActivity" />
@@ -30,13 +31,15 @@
         <activity android:name=".TestWebViewActivity" />
         <activity android:name=".TestServiceActivity" />
         <activity android:name=".TestRetrofitActivity" />
-        <activity android:name=".RichEditActivity"></activity>
+        <activity android:name=".RichEditActivity" />
 
-        <service android:name="com.wusir.service.ForegroundService"></service>
-        <service android:name="com.wusir.service.BackgroundService"></service>
-        <service android:name="com.wusir.service.RemoteService"></service>
-        <service android:name="com.wusir.service.KeepProcessAliveService"></service>
-        <service android:name="com.wusir.service.IntentServiceDemo"></service>
+        <service android:name="com.wusir.service.ForegroundService" />
+        <service android:name="com.wusir.service.BackgroundService" />
+        <service android:name="com.wusir.service.RemoteService" />
+        <service android:name="com.wusir.service.KeepProcessAliveService" />
+        <service android:name="com.wusir.service.IntentServiceDemo" />
+
+        <activity android:name=".ConstraintDemoActivity"></activity>
     </application>
 
 </manifest>
