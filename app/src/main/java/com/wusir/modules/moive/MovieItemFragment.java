@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,11 +39,6 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
     protected boolean isDataInitiated;
     private IMovie.Presenter presenter;
     private  ProgressDialog pd;
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     public static MovieItemFragment newInstance(int start,int count) {
         MovieItemFragment fragment = new MovieItemFragment();
         Bundle args = new Bundle();
@@ -51,32 +47,22 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("MovieItemFragment","onCreate1");
         if (getArguments() != null) {
             start= getArguments().getInt(ARG_START);
             count= getArguments().getInt(ARG_COUNT);
         }
         setPresenter(presenter);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("MovieItemFragment","onCreateView2");
         View view=inflater.inflate(R.layout.fragment_movie_item, container, false);
         ButterKnife.bind(this,view);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         smartLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -96,11 +82,32 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
                 presenter.doLoadMoreData(start+10,count);
             }
         });
+        return view;
+    }
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.e("MovieItemFragment","onViewCreated3");
+
+    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.e("MovieItemFragment","onActivityCreated4");
         mRecyclerView.setHasFixedSize(true);
         isViewInitiated = true;
-        //myAdapter=new MovieAdapter(list,getContext());
-        //mRecyclerView.setAdapter(myAdapter);
+        myAdapter=new MovieAdapter(list,getContext());
+        mRecyclerView.setAdapter(myAdapter);
         prepareFetchData();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("MovieItemFragment","onStart5");
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -149,8 +156,8 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
     @Override
     public void onSetAdapter(List<Movie> list) {
         this.list=list;
-        myAdapter=new MovieAdapter(list,getContext());
-        mRecyclerView.setAdapter(myAdapter);
+        //myAdapter=new MovieAdapter(list,getContext());
+        //mRecyclerView.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
     }
 

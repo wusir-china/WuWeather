@@ -122,7 +122,7 @@ public class GameRankActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_download:
-                startActivity(new Intent(this,DownloadCenterActivity.class));
+                startActivity(new Intent(this,TestDouBanActivity.class));
                 break;
         }
     }

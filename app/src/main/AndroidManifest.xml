@@ -24,7 +24,7 @@
         <activity android:name="com.wusir.player.VideoActivity" />
         <activity android:name="com.wusir.player.Video2Activity" />
         <activity android:name=".GameRankActivity" />
-        <activity android:name=".DownloadCenterActivity" />
+        <activity android:name=".TestDouBanActivity" />
         <activity android:name=".CheckCodeActivity" />
         <activity android:name=".QRcodeActivity" />
         <activity android:name=".PhotoViewActivity" />
@@ -40,6 +40,14 @@
         <service android:name="com.wusir.service.IntentServiceDemo" />
 
         <activity android:name=".ConstraintDemoActivity"></activity>
+        <receiver android:name="com.wusir.broadcast.MyBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.wusir.wuweather1"></action>
+                <action android:name="com.wusir.wuweather2"></action>
+                <action android:name="com.wusir.wuweather3"></action>
+                <action android:name="com.wusir.wuweatherX"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.wusir.wuweather.DownloadCenterActivity">
+    tools:context="com.wusir.wuweather.TestDouBanActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"

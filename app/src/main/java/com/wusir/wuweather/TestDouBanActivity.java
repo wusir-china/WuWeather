@@ -14,7 +14,7 @@ import com.wusir.modules.moive.MovieItemFragment;
 import com.wusir.modules.weather.WeatherItemFragment;
 import com.wusir.util.BottomNavigationViewHelper;
 
-public class DownloadCenterActivity extends AppCompatActivity {
+public class TestDouBanActivity extends AppCompatActivity {
     private ViewPager vp;
     private BottomNavigationView bottom_navigation;
     private int position;
@@ -26,6 +26,7 @@ public class DownloadCenterActivity extends AppCompatActivity {
     private static final String SELECT_ITEM = "bottomNavigationSelectItem";
     private MenuItem menuItem;
     private ViewPagerAdapter adapter;
+    //我是用了viewpager+fragment+bottomNavigationView实现滑动和点击两种方式切换的
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

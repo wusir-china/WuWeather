@@ -1,5 +1,9 @@
 package com.wusir.wuweather;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -9,6 +13,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.wusir.StatusBarCompat;
 import com.wusir.modules.moive.DouBanMovieService;
 import com.wusir.modules.moive.Movie;
+import com.wusir.util.ToastUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,9 +41,47 @@ public class TestRetrofitActivity extends RxAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_retrofit);
         StatusBarCompat.compat(this,R.color.colorGreen);
+        //测试MyBroadcastReceiver
+        Intent globalIntent=new Intent();
+        globalIntent.setAction("com.wusir.wuweather1");
+        globalIntent.addFlags(1);
+        globalIntent.putExtra("name","aaa");
+        sendBroadcast(globalIntent);
+        //以下动态注册时才会用,静态注册在xml中
+        //1.注册广播
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction("com.wusir.wuweather");
+        //指定当前动作（Action）被执行的环境
+        intentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        registerReceiver(receiver,intentFilter);
+        //2.发送广播
+        Intent localIntent=new Intent();
+        localIntent.putExtra("name","bbb");
+        localIntent.setAction("com.wusir.wuweather");
+        sendBroadcast(localIntent);
         result= (TextView) findViewById(R.id.result);
         getDataByRxjava();
     }
+    private BroadcastReceiver receiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction()!=null){
+                switch (intent.getAction()){
+                    case "com.wusir.wuweather":
+                        String extra=intent.getStringExtra("name");
+                        ToastUtil.showToast(context,extra);
+                        break;
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
+
     //3.get方式的异步请求
     private void getDataByOkhttp(){
         OkHttpClient okHttpClient = new OkHttpClient();

@@ -1,8 +1,6 @@
 package com.wusir.wuweather;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,10 +14,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import android.support.design.widget.TabLayout;
-import android.text.SpannableStringBuilder;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
@@ -52,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 //    Context context2=getApplicationContext();
 //    //3.
 //    Context context3=context2.getApplicationContext();
+    //4.Fragment中的getActivity()和getContext()
     private ArrayList<String> aTitleList;
     private ViewPager vp;
     private ItemFragment f1,f2,f3,f4;
@@ -199,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         testDouBan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,DownloadCenterActivity.class));
+                startActivity(new Intent(MainActivity.this,TestDouBanActivity.class));
             }
         });
         mArcMenu.setOnMenuItemClickListener(new ArcMenu.OnMenuItemClickListener(){
