@@ -155,9 +155,7 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
 
     @Override
     public void onSetAdapter(List<Movie> list) {
-        this.list=list;
-        //myAdapter=new MovieAdapter(list,getContext());
-        //mRecyclerView.setAdapter(myAdapter);
+        this.list.addAll(list);
         myAdapter.notifyDataSetChanged();
     }
 
