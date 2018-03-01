@@ -60,6 +60,9 @@ public class BackgroundService extends Service {//implements IBackgroundService
         super.onDestroy();
         threadDisable=true;
         Log.i("ForegroundService", "onDestroy");
+        //保证 Service 在后台不被 kill
+        //1.发送一个自定义的广播
+        //2.当收到广播的时候，重新启动service；
     }
 
 //    @Override
