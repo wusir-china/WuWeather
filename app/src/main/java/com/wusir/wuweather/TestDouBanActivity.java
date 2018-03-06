@@ -43,6 +43,7 @@ public class TestDouBanActivity extends AppCompatActivity {
     }
     private void initViews() {
         vp = (ViewPager)findViewById(R.id.vp);
+        //vp.setOffscreenPageLimit(3);
         bottom_navigation= (BottomNavigationView) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottom_navigation);
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
