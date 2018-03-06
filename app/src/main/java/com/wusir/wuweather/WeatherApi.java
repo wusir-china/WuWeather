@@ -1,6 +1,7 @@
 package com.wusir.wuweather;
 
 import com.wusir.bean.HeWeathers;
+import com.wusir.bean.Weather;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -40,6 +41,9 @@ public interface WeatherApi {
     @GET("forecast")
     Observable<ResponseBody> getWeather4Json(@Query("city") String city,@Query("key") String key);
 
+    //5.使用了RxJava返回类型Observable和自定义泛型参数
+    @GET("forecast")
+    Observable<Weather> getWeather5Json(@Query("city") String city, @Query("key") String key);
     /**
      * {@link Part} 后面支持三种类型，{@link RequestBody}、{@link okhttp3.MultipartBody.Part} 、任意类型
      * 除 {@link okhttp3.MultipartBody.Part} 以外，其它类型都必须带上表单字段({@link okhttp3.MultipartBody.Part} 中已经包含了表单字段的信息)，

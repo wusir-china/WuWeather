@@ -21,7 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.wusir.player.VideoActivity" />
+        <activity android:name="com.wusir.player.VideoActivity"/>
         <activity android:name="com.wusir.player.Video2Activity" />
         <activity android:name=".GameRankActivity" />
         <activity android:name=".TestDouBanActivity" />

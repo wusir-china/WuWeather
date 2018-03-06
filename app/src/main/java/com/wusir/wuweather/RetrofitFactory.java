@@ -4,6 +4,8 @@ import com.franmontiel.persistentcookiejar.ClearableCookieJar;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wusir.modules.moive.DouBanMovieService;
 import com.wusir.util.NetWorkUtil;
 
@@ -12,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -91,10 +95,12 @@ public class RetrofitFactory {
                         .readTimeout(15, TimeUnit.SECONDS)
                         .writeTimeout(15, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true);
+                //解决返回数据为null的情况。
+                Gson gson=new GsonBuilder().setLenient().serializeNulls().create();
                 retrofit = new Retrofit.Builder()
                         .baseUrl(WeatherApi.Host)
                         .client(builder.build())
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                         .build();
             }

@@ -1,5 +1,7 @@
 package com.wusir.modules.weather;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wusir.bean.HeWeathers;
 import com.wusir.bean.Weather;
 import com.wusir.wuweather.RetrofitFactory;
@@ -113,6 +115,42 @@ public class WeatherPresenter implements IWeather.Presenter{
                         view.onHideLoading();
                     }
                 });
+        //gosn解析
+//        RetrofitFactory.getRetrofit().create(WeatherApi.class)
+//                .getWeather5Json(city,WeatherApi.key)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new Observer<Weather>() {
+//                    @Override
+//                    public void onSubscribe(@NonNull Disposable d) {
+//                        d.isDisposed();
+//                    }
+//
+//                    @Override
+//                    public void onNext(@NonNull Weather weather) {//weather为gson解析出来后的实体数据
+//                        //使用gson解析
+//                        dataList.clear();
+//                        dataList.add(weather);
+//                        if (null != dataList && dataList.size() > 0) {
+//                            doSetAdapter(dataList);
+//                        } else {
+//                            doShowNoMore();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(@NonNull Throwable e) {
+//                        e.printStackTrace();
+//                        //网络错误时执行
+//                        doShowNetError();
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        //数据成功加载完成时执行
+//                        view.onHideLoading();
+//                    }
+//                });
     }
     @Override
     public void doLoadMoreData(String city) {

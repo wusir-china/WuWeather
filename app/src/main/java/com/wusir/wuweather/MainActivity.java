@@ -1,8 +1,10 @@
 package com.wusir.wuweather;
 
 import android.Manifest;
+import android.app.IntentService;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.design.widget.CoordinatorLayout;
@@ -14,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import android.support.design.widget.TabLayout;
 import android.view.ContextMenu;
@@ -284,4 +287,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //设置Activity的android: configChanges=“orientation|keyboardHidden”时执行此方法。
+    }
 }

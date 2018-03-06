@@ -1,5 +1,6 @@
 package com.wusir.broadcast;
 
+import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
