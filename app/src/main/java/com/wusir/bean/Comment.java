@@ -1,5 +1,9 @@
 package com.wusir.bean;
 
+import android.support.annotation.NonNull;
+
+import java.util.Arrays;
+
 /**
  * 评论对象
  */

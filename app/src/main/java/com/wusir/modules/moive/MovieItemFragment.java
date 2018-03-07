@@ -66,12 +66,12 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
         smartLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                presenter.doLoadData(start,count);
-//                int firstVisibleItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-//                if (firstVisibleItemPosition == 0) {
-//                    presenter.doLoadData(start,count);
-//                    return;
-//                }
+                //presenter.doLoadData(start,count);
+                int firstVisibleItemPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition == 0) {
+                    presenter.doLoadData(start,count);
+                    return;
+                }
                 //平滑的定位到指定项
                 mRecyclerView.smoothScrollToPosition(0);
             }
@@ -163,6 +163,5 @@ public class MovieItemFragment extends Fragment implements IMovie.View{
     public void onShowNoMore() {
         ToastUtil.showToast(getActivity(),"没有更多数据");
         //myAdapter.notifyDataSetChanged();
-        //smartLayout.finishRefresh();
     }
 }
