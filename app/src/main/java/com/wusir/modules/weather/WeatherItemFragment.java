@@ -3,6 +3,7 @@ package com.wusir.modules.weather;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -139,11 +140,17 @@ public class WeatherItemFragment extends Fragment implements IWeather.View{
         mRecyclerView.setAdapter(myAdapter);
         prepareFetchData();
     }
+    //设置Fragment可见状态
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         this.isVisibleToUser = isVisibleToUser;
         prepareFetchData();
+    }
+    //获得Fragment可见状态
+    @Override
+    public boolean getUserVisibleHint() {
+        return super.getUserVisibleHint();
     }
 
     public boolean prepareFetchData() {
