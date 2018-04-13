@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WuWeather.iml" filepath="$PROJECT_DIR$/WuWeather.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/WuWeather.iml" filepath="$PROJECT_DIR$/.idea/WuWeather.iml" />
+      <module fileurl="file://E:\workspaceOfAS\WuWeather\WuWeather.iml" filepath="E:\workspaceOfAS\WuWeather\WuWeather.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://E:\workspaceOfAS\WuWeather\app\app.iml" filepath="E:\workspaceOfAS\WuWeather\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/goldenlibrary/goldenlibrary.iml" filepath="$PROJECT_DIR$/goldenlibrary/goldenlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/zxinglite/zxinglite.iml" filepath="$PROJECT_DIR$/zxinglite/zxinglite.iml" />
+      <module fileurl="file://E:\workspaceOfAS\WuWeather\zxinglite\zxinglite.iml" filepath="E:\workspaceOfAS\WuWeather\zxinglite\zxinglite.iml" />
     </modules>
   </component>
 </project>
