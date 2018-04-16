@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 //上传到jcenter时所需插件
-apply plugin: 'maven'
 apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 26
@@ -27,12 +26,23 @@ android {
     }
 }
 publish {
+    repoName = 'GdAndroidLibrary'//填写自己创建的远程仓库名字,不指明，默认是上传到maven
     userOrg = 'wusir-china'// 这里填jcenter账户或用户名
-    groupId = 'com.goldensoft.goldenlibrary'// 库的包名
-    artifactId = 'goldenlibrary'// library的名字
+    //假如库包名为com.goldensoft.goldenlibrary时，一般最好groupId为:com.goldensoft,
+    // artifactId为:goldenlibrary且后者要与jcenter上创建的包名一致。
+    groupId = 'com.goldensoft'
+    artifactId = 'goldenlibrary'
     version = '1.0.0'// 版本
     description = 'golden'//库的描述
-    website = "https://github.com/wusir-china/WuWeather.git"//库所在project的git地址
+    //你的开源地址，注意，一定要用GitHub地址
+    website = "https://github.com/wusir-china/WuWeather.git"//库所在project的github地址,项目主页
+}
+tasks.withType(Javadoc) {
+    options {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+        options.addStringOption('charSet', 'UTF-8')
+    }
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -42,14 +52,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-//    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-//    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-//    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-//    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-//    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.google.code.gson:gson:2.8.2'
-//    compile "io.reactivex.rxjava2:rxjava:2.1.10"
-//    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.google.zxing:core:3.3.2'
@@ -67,7 +70,6 @@ task exportJar(type: Copy) {
     from('build/intermediates/bundles/release/')
     into('release/')
     include('classes.jar')
-    ///Rename the jar
     rename('classes.jar', 'goldenSoftSDK.jar')
 }
 

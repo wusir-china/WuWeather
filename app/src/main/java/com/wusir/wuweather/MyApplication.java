@@ -20,10 +20,10 @@ public class MyApplication extends Application {
         AppContext=getApplicationContext();
         OkGo.getInstance().init(this);
         //内存泄漏检测
-        if(LeakCanary.isInAnalyzerProcess(this)){
-            return;
-        }
-        LeakCanary.install(this);
+//        if(LeakCanary.isInAnalyzerProcess(this)){
+//            return;
+//        }
+//        LeakCanary.install(this);
         LitePal.initialize(this);
     }
 }

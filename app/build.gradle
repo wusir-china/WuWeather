@@ -30,6 +30,10 @@ android {
         daoPackage 'com.wusir.greendao.gen' //自动生成的工具类的包名
         targetGenDir 'src/main/java' //路径
     }
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
 }
 
 dependencies {
@@ -43,7 +47,6 @@ dependencies {
     compile project(':zxinglite')
     // RxLifecycle
     // 持久化 Cookie
-    //compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.3'//没有使用特殊Header，可以不加这行
     //html解析
     compile 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
     compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.1.0'
